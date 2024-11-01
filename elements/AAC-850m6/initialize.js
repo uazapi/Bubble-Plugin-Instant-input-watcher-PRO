@@ -69,6 +69,7 @@ function(instance, context) {
                     // Lê o arquivo completo em Base64
                     const reader = new FileReader();
                     reader.onload = function(event) {
+                        publish('pasted_file', event.target.result);
                         publish('pasted_file_base64', event.target.result);
                         trigger('file_pasted');
                     };
@@ -115,6 +116,7 @@ function(instance, context) {
             
             // Publica o preview no estado
             publish('videoImagePreview', previewImage);
+            publish('videoImagePreview64', previewImage);
             trigger('video_preview_generated'); // Trigger opcional para indicar que o preview foi gerado
             
             // Libera o objeto URL
@@ -144,6 +146,7 @@ function(instance, context) {
                         // Lê o arquivo completo em Base64
                         const reader = new FileReader();
                         reader.onload = function(event) {
+                            publish('pasted_file', event.target.result);
                             publish('pasted_file_base64', event.target.result);
                             trigger('file_pasted');
                             data.dropEventTriggered = false;  // Reseta a flag
