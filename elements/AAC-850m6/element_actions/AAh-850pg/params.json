@@ -1,0 +1,12 @@
+{
+    "caption": "Sync value",
+    "fields": {
+        "AAi": {
+            "caption": "Value input",
+            "editor": "DynamicValue",
+            "name": "value_input",
+            "rank": 0,
+            "value": "text"
+        }
+    }
+}

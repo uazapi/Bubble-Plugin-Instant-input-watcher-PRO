@@ -212,6 +212,14 @@
             "is_list": true,
             "name": "emoji_flags",
             "value": "text"
+        },
+        "AAj": {
+            "caption": "pasted_file",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "pasted_file",
+            "value": "file"
         }
     }
 }

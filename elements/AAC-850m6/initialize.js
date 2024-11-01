@@ -11,68 +11,52 @@ function(instance, context) {
     data.dropEventTriggered = false;
 
     function valueChanged(el) {
-        let value = el.value;
+        const value = el.value;
         publish('value', value);
         publish('character_count', value.length);
+        trigger('value_changed');
     }
 
-    data.valueChanged = valueChanged;
 
-    // Função para capturar um quadro de pré-visualização do vídeo
-    function generateVideoPreview(file) {
-        const video = document.createElement('video');
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
 
-        video.src = URL.createObjectURL(file);
-        video.currentTime = 1; // Define o tempo do frame (ajuste conforme desejado)
-
-        video.addEventListener('loadeddata', function() {
-            // Define o tamanho do canvas
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            // Desenha o quadro no canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Converte o canvas para uma imagem Base64
-            const previewImage = canvas.toDataURL('image/png');
-            
-            // Publica o preview no estado
-            publish('videoImagePreview', previewImage);
-            trigger('video_preview_generated'); // Trigger opcional para indicar que o preview foi gerado
-            
-            // Libera o objeto URL
-            URL.revokeObjectURL(video.src);
+    // Função para observar mudanças programáticas no valor
+    function observeProgrammaticChanges(el) {
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                    valueChanged(el); // Chama a função de mudança de valor
+                }
+            });
         });
+        // Configura o observer para observar mudanças no atributo `value`
+        observer.observe(el, { attributes: true, attributeFilter: ['value'] });
+        data.observer = observer; // Armazena o observer para uso futuro, se necessário
     }
 
     function setListeners(el, autocomplete) {
+        // Captura o valor inicial
         valueChanged(el);
 
-        el.addEventListener('keydown', function(e){
-            let keyCode = e.which;  
+        // Eventos de input e teclado
+        el.addEventListener('input', () => valueChanged(el));
+        el.addEventListener('keydown', function(e) {
+            const keyCode = e.which;  
             if (keyCode === 13 && !e.shiftKey) {                    
                 data.preventDefault ? e.preventDefault() : '';
                 trigger('enter_pressed');
+            } else if (keyCode === 13 && e.shiftKey) {
+                trigger('shift_enter_is_pressed');
             }
-            (keyCode === 13 && e.shiftKey) ? trigger('shift_enter_is_pressed') : '';
         });
 
-        el.addEventListener('input', function() {
-            valueChanged(el);
-            trigger('value_changed');
-        });
+        // Configura o observer para mudanças programáticas
+        observeProgrammaticChanges(el);
 
-        el.addEventListener('focus', function () {
-            trigger('input_is_focused');
-        });
+        // Eventos de foco e perda de foco
+        el.addEventListener('focus', () => trigger('input_is_focused'));
+        el.addEventListener('blur', () => trigger('input_lost_focus'));
 
-        el.addEventListener('blur', function () {
-            trigger('input_lost_focus');
-        });
-        
-        // Evento de colagem para converter arquivo em base64 ou capturar preview de vídeo:
+        // Evento de colagem para converter arquivo em base64 ou capturar preview de vídeo
         el.addEventListener('paste', function(event) {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
 
@@ -107,19 +91,35 @@ function(instance, context) {
         if (autocomplete) {
             el.autocomplete = "off";
         }
+    }
 
-        // Observer para detectar mudanças programáticas
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
-                    valueChanged(el);
-                    trigger('value_changed');
-                }
-            });
+    // Função para capturar um quadro de pré-visualização do vídeo
+    function generateVideoPreview(file) {
+        const video = document.createElement('video');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        video.src = URL.createObjectURL(file);
+        video.currentTime = 1; // Define o tempo do frame (ajuste conforme desejado)
+
+        video.addEventListener('loadeddata', function() {
+            // Define o tamanho do canvas
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Desenha o quadro no canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Converte o canvas para uma imagem Base64
+            const previewImage = canvas.toDataURL('image/png');
+            
+            // Publica o preview no estado
+            publish('videoImagePreview', previewImage);
+            trigger('video_preview_generated'); // Trigger opcional para indicar que o preview foi gerado
+            
+            // Libera o objeto URL
+            URL.revokeObjectURL(video.src);
         });
-
-        observer.observe(el, { attributes: true });
-        data.observer = observer;
     }
 
     // Função para configurar o evento de drop em um elemento específico
@@ -127,10 +127,7 @@ function(instance, context) {
         const dropElement = document.getElementById(dropElementId);
 
         if (dropElement) {
-            dropElement.addEventListener('dragover', function(event) {
-                event.preventDefault();
-            });
-
+            dropElement.addEventListener('dragover', event => event.preventDefault());
             dropElement.addEventListener('drop', function(event) {
                 event.preventDefault();
                 
@@ -180,8 +177,16 @@ function(instance, context) {
         valueChanged(data.el);
         data.dropEventTriggered = false; // Reseta a flag ao resetar
     };
-    
-    
+
+        // Função para definir o valor do campo de entrada e sincronizar com o estado
+        data.setInputValue = function(newValue) {
+            if (data.el) {
+                data.el.value = newValue; // Define o valor diretamente no campo de entrada
+                valueChanged(data.el); // Atualiza o estado e aciona o evento de mudança de valor
+            }
+        };
+
+
     // Emojis
     const emoji_smiles = ["😀","😃","😄","😁","😆","😅","😂","🤣","🥲","🥹","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🥸","🤩","🥳","🙂‍↕️","😏","😒","🙂‍↔️","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😮‍💨","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🫣","🤗","🫡","🤔","🫢","🤭","🤫","🤥","😶","😶‍🌫️","😐","😑","😬","🫨","🫠","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","😵‍💫","🫥","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾"];    
     publish('emoji_smiles', emoji_smiles);
