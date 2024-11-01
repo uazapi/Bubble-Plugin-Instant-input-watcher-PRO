@@ -1,0 +1,12 @@
+{
+    "calls": {
+        "AAV": {
+            "method": "get",
+            "name": "📄Emojis",
+            "publish_as": "data",
+            "rank": 0,
+            "should_reinitialize": true
+        }
+    },
+    "human": "📒"
+}

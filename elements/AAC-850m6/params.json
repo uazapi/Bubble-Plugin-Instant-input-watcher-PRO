@@ -1,0 +1,217 @@
+{
+    "add_is_visible": true,
+    "category": "visual elements",
+    "default_dim": {
+        "height": 5,
+        "width": 5
+    },
+    "display": "chat Input",
+    "events": {
+        "AAI": {
+            "caption": "value changed",
+            "name": "value_changed"
+        },
+        "AAJ": {
+            "caption": "enter pressed",
+            "name": "enter_pressed"
+        },
+        "AAK": {
+            "caption": "input is focused",
+            "name": "input_is_focused"
+        },
+        "AAL": {
+            "caption": "input lost focus",
+            "name": "input_lost_focus"
+        },
+        "AAM": {
+            "caption": "shift + enter is pressed",
+            "name": "shift_enter_is_pressed"
+        },
+        "AAR": {
+            "caption": "Pasted file",
+            "name": "file_pasted"
+        },
+        "AAU": {
+            "caption": "Video Preview Generated",
+            "name": "video_preview_generated"
+        }
+    },
+    "fields": {
+        "AAD": {
+            "caption": "Input id",
+            "editor": "DynamicValue",
+            "name": "input_id",
+            "rank": 0,
+            "value": "text"
+        },
+        "AAE": {
+            "caption": "Disable input autocomplete",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "disable_autocomplete",
+            "rank": 1
+        },
+        "AAF": {
+            "caption": "Prevent 'Enter' from creating a new line",
+            "default_val": false,
+            "doc": "Multi-line input only. Keeps 'Enter' from creating a new line. 'Shift + Enter' will continue working as expected.",
+            "editor": "Checkbox",
+            "name": "prevent_default",
+            "rank": 2
+        },
+        "AAS": {
+            "caption": "Drop id",
+            "doc": "Drop file on this element id to get base64",
+            "editor": "DynamicValue",
+            "name": "drop_id",
+            "rank": 3,
+            "value": "text"
+        }
+    },
+    "icon": "ion-eye",
+    "property_applications": {
+        "MinWidth": true,
+        "resizable": true
+    },
+    "states": {
+        "AAG": {
+            "caption": "value",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "value",
+            "value": "text"
+        },
+        "AAH": {
+            "caption": "# of characters",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "character_count",
+            "value": "number"
+        },
+        "AAO": {
+            "caption": "File Type",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "pasted_file_type",
+            "value": "text"
+        },
+        "AAP": {
+            "caption": "File base 64",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "pasted_file_base64",
+            "value": "text"
+        },
+        "AAT": {
+            "caption": "videoImagePreview",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "videoImagePreview",
+            "value": "image"
+        },
+        "AAW": {
+            "caption": "Emoji Smiles",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_smiles",
+            "value": "text"
+        },
+        "AAX": {
+            "caption": "Emoji Gestures and Body Parts",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_gesture_body",
+            "value": "text"
+        },
+        "AAY": {
+            "caption": "Emoji People and Fantasy",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_people_fantasy",
+            "value": "text"
+        },
+        "AAZ": {
+            "caption": "Emoji Clothing and Accessories",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_clothing_accessories",
+            "value": "text"
+        },
+        "AAa": {
+            "caption": "Emoji Animals & Nature",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_animals_nature",
+            "value": "text"
+        },
+        "AAb": {
+            "caption": "Emoji Food & Drink",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_food_drink",
+            "value": "text"
+        },
+        "AAc": {
+            "caption": "Emoji Activity and Sports",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_activity_and_sports",
+            "value": "text"
+        },
+        "AAd": {
+            "caption": "Emoji Travel & Places",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_travel_places",
+            "value": "text"
+        },
+        "AAe": {
+            "caption": "Emoji Objects",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_objects",
+            "value": "text"
+        },
+        "AAf": {
+            "caption": "Emoji Symbols",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_symbols",
+            "value": "text"
+        },
+        "AAg": {
+            "caption": "Emoji Flags",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "is_list": true,
+            "name": "emoji_flags",
+            "value": "text"
+        }
+    }
+}
