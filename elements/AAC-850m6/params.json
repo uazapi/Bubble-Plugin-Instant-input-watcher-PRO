@@ -5,7 +5,7 @@
         "height": 5,
         "width": 5
     },
-    "display": "chat Input",
+    "display": "💬 chat Input",
     "events": {
         "AAI": {
             "caption": "value changed",
@@ -99,7 +99,7 @@
             "value": "text"
         },
         "AAP": {
-            "caption": "pasted_file",
+            "caption": "File",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
@@ -107,7 +107,7 @@
             "value": "file"
         },
         "AAQ": {
-            "caption": "File base 64",
+            "caption": "File base64",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
@@ -115,7 +115,7 @@
             "value": "text"
         },
         "AAS": {
-            "caption": "videoImagePreview base64",
+            "caption": "videoImagePreview",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
@@ -123,12 +123,12 @@
             "value": "image"
         },
         "AAT": {
-            "caption": "videoImagePreview",
+            "caption": "videoImagePreview base64",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
-            "name": "videoImagePreview",
-            "value": "image"
+            "name": "videoImagePreview64",
+            "value": "text"
         },
         "AAW": {
             "caption": "Emoji Smiles",
