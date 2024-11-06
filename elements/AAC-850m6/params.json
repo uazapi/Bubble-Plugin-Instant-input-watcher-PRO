@@ -99,12 +99,12 @@
             "value": "text"
         },
         "AAP": {
-            "caption": "File",
+            "caption": "File Blob URL",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "pasted_file",
-            "value": "file"
+            "value": "text"
         },
         "AAQ": {
             "caption": "File base64",
@@ -112,22 +112,6 @@
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "pasted_file_base64",
-            "value": "text"
-        },
-        "AAS": {
-            "caption": "videoImagePreview",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "videoImagePreview",
-            "value": "image"
-        },
-        "AAT": {
-            "caption": "videoImagePreview base64",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "videoImagePreview64",
             "value": "text"
         },
         "AAW": {

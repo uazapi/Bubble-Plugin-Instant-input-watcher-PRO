@@ -17,8 +17,6 @@ function(instance, context) {
         trigger('value_changed');
     }
 
-
-
     // Função para observar mudanças programáticas no valor
     function observeProgrammaticChanges(el) {
         const observer = new MutationObserver(mutations => {
@@ -34,10 +32,8 @@ function(instance, context) {
     }
 
     function setListeners(el, autocomplete) {
-        // Captura o valor inicial
         valueChanged(el);
 
-        // Eventos de input e teclado
         el.addEventListener('input', () => valueChanged(el));
         el.addEventListener('keydown', function(e) {
             const keyCode = e.which;  
@@ -49,14 +45,12 @@ function(instance, context) {
             }
         });
 
-        // Configura o observer para mudanças programáticas
         observeProgrammaticChanges(el);
 
-        // Eventos de foco e perda de foco
         el.addEventListener('focus', () => trigger('input_is_focused'));
         el.addEventListener('blur', () => trigger('input_lost_focus'));
 
-        // Evento de colagem para converter arquivo em base64 ou capturar preview de vídeo
+        // Evento de colagem para converter arquivo em base64 e gerar blobURL
         el.addEventListener('paste', function(event) {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
 
@@ -65,7 +59,11 @@ function(instance, context) {
                 const file = item.getAsFile();
                 if (file) {
                     publish('pasted_file_type', fileType);
-                    
+
+                    // Cria um blobURL para o arquivo
+                    const blobURL = URL.createObjectURL(file);
+                    publish('pasted_file', blobURL);
+
                     // Lê o arquivo completo em Base64
                     const reader = new FileReader();
                     reader.onload = function(event) {
@@ -77,11 +75,6 @@ function(instance, context) {
                         console.error("Erro ao converter arquivo para Base64:", error);
                     };
                     reader.readAsDataURL(file);
-
-                    // Gera a pré-visualização se for um vídeo
-                    if (fileType.includes("video")) {
-                        generateVideoPreview(file); // Captura preview do vídeo
-                    }
                     
                     event.preventDefault();
                     break;
@@ -94,37 +87,6 @@ function(instance, context) {
         }
     }
 
-    // Função para capturar um quadro de pré-visualização do vídeo
-    function generateVideoPreview(file) {
-        const video = document.createElement('video');
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        video.src = URL.createObjectURL(file);
-        video.currentTime = 1; // Define o tempo do frame (ajuste conforme desejado)
-
-        video.addEventListener('loadeddata', function() {
-            // Define o tamanho do canvas
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            // Desenha o quadro no canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Converte o canvas para uma imagem Base64
-            const previewImage = canvas.toDataURL('image/png');
-            
-            // Publica o preview no estado
-            publish('videoImagePreview', previewImage);
-            publish('videoImagePreview64', previewImage);
-            trigger('video_preview_generated'); // Trigger opcional para indicar que o preview foi gerado
-            
-            // Libera o objeto URL
-            URL.revokeObjectURL(video.src);
-        });
-    }
-
-    // Função para configurar o evento de drop em um elemento específico
     function setDropListener(dropElementId) {
         const dropElement = document.getElementById(dropElementId);
 
@@ -133,8 +95,8 @@ function(instance, context) {
             dropElement.addEventListener('drop', function(event) {
                 event.preventDefault();
                 
-                if (!data.dropEventTriggered) {  // Verifica se o evento já foi acionado
-                    data.dropEventTriggered = true;  // Marca que o evento foi acionado
+                if (!data.dropEventTriggered) {
+                    data.dropEventTriggered = true;
 
                     const files = event.dataTransfer.files;
                     if (files.length > 0) {
@@ -143,26 +105,26 @@ function(instance, context) {
                         
                         publish('pasted_file_type', fileType);
                         
+                        // Cria um blobURL para o arquivo
+                        const blobURL = URL.createObjectURL(file);
+                        publish('pasted_file', blobURL);
+
                         // Lê o arquivo completo em Base64
                         const reader = new FileReader();
                         reader.onload = function(event) {
-                            publish('pasted_file', event.target.result);
+                           
                             publish('pasted_file_base64', event.target.result);
                             trigger('file_pasted');
-                            data.dropEventTriggered = false;  // Reseta a flag
+                            data.dropEventTriggered = false;
                         };
                         reader.onerror = function(error) {
                             console.error("Erro ao converter arquivo para Base64:", error);
-                            data.dropEventTriggered = false;  // Reseta a flag em caso de erro
+                            data.dropEventTriggered = false;
                         };
                         reader.readAsDataURL(file);
 
-                        // Gera a pré-visualização se for um vídeo
-                        if (fileType.includes("video")) {
-                            generateVideoPreview(file); // Captura preview do vídeo
-                        }
                     } else {
-                        data.dropEventTriggered = false;  // Reseta a flag se não houver arquivo
+                        data.dropEventTriggered = false;
                     }
                 }
             });
@@ -172,22 +134,21 @@ function(instance, context) {
     }
 
     data.setListeners = setListeners;
-    data.setDropListener = setDropListener; // Função para configurar o evento de drop
+    data.setDropListener = setDropListener;
     data.reset = function() {
         data.el.value = "";
         data.pastedFileBase64 = null;
         data.pasted_file_type = null;
         valueChanged(data.el);
-        data.dropEventTriggered = false; // Reseta a flag ao resetar
+        data.dropEventTriggered = false;
     };
 
-        // Função para definir o valor do campo de entrada e sincronizar com o estado
-        data.setInputValue = function(newValue) {
-            if (data.el) {
-                data.el.value = newValue; // Define o valor diretamente no campo de entrada
-                valueChanged(data.el); // Atualiza o estado e aciona o evento de mudança de valor
-            }
-        };
+    data.setInputValue = function(newValue) {
+        if (data.el) {
+            data.el.value = newValue;
+            valueChanged(data.el);
+        }
+    };
 
 
     // Emojis

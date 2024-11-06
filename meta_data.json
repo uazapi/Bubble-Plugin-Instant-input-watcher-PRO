@@ -5,8 +5,8 @@
         "2": "data (things)"
     },
     "data_tracked": false,
-    "description": "Turn your multiline input into perfect chat input.\n\nMonitor input field and instantly detect value changes in real-time, captures files pasted or dropped into the input field or another element. \n\nWhen a file is pasted or dropped, its Base64 string and MIME type are automatically published, enabling easy handling of file data in workflows.\n\nList categorized emojis.\n\n\nBase Plugin: 1T - Input Watcher:  https://bubble.io/plugin/1t---input-watcher-1646064999757x815455456760954900\n\ndemo: https://input-watcher.bubbleapps.io/version-test?debug_mode=true\n\ndemo editor: https://bubble.io/page?id=input-watcher&test_plugin=1729943734560x114402064874340350_current&tab=tabs-1&name=index\n\n",
+    "description": "Transform your multiline input into a powerful chat tool with Chat Input PRO.\n\nFeatures:\n\nMonitor changes in the input field in real time, instantly capturing each update.\n\nSupports file uploads via paste or drag-and-drop in the input field or any designated element.\n\nAutomatically converts pasted or dropped files to Base64 strings and blobURLs, with MIME type published, enabling seamless file handling in workflows.\n\nIncludes a complete, categorized native emoji list within the Chat Input element.\n\n\ndemo: https://input-watcher.bubbleapps.io/version-test?debug_mode=true\n\ndemo editor: https://bubble.io/page?id=input-watcher&test_plugin=1729943734560x114402064874340350_current&tab=tabs-1&name=index\n\n",
     "image": "//meta-q.cdn.bubble.io/f1729945879412x444864634982207400/plugin2.jpg",
     "license": "open_source",
-    "name": "Instant input + Uploader base64 + Emojis"
+    "name": "Chat Input PRO"
 }
