@@ -7,8 +7,9 @@ function(instance, context) {
           publish = i.publishState,
           trigger = i.triggerEvent;
 
-    // Flag para evitar duplicação de evento
+    // Flags para evitar duplicação de eventos
     data.dropEventTriggered = false;
+    data.pasteEventTriggered = false;
 
     function valueChanged(el) {
         const value = el.value;
@@ -52,32 +53,37 @@ function(instance, context) {
 
         // Evento de colagem para converter arquivo em base64 e gerar blobURL
         el.addEventListener('paste', function(event) {
-            const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            if (!data.pasteEventTriggered) {
+                data.pasteEventTriggered = true;
 
-            for (const item of items) {
-                const fileType = item.type;
-                const file = item.getAsFile();
-                if (file) {
-                    publish('pasted_file_type', fileType);
+                const items = (event.clipboardData || event.originalEvent.clipboardData).items;
 
-                    // Cria um blobURL para o arquivo
-                    const blobURL = URL.createObjectURL(file);
-                    publish('pasted_file', blobURL);
+                for (const item of items) {
+                    const fileType = item.type;
+                    const file = item.getAsFile();
+                    if (file) {
+                        publish('pasted_file_type', fileType);
 
-                    // Lê o arquivo completo em Base64
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        publish('pasted_file', event.target.result);
-                        publish('pasted_file_base64', event.target.result);
-                        trigger('file_pasted');
-                    };
-                    reader.onerror = function(error) {
-                        console.error("Erro ao converter arquivo para Base64:", error);
-                    };
-                    reader.readAsDataURL(file);
-                    
-                    event.preventDefault();
-                    break;
+                        // Cria um blobURL para o arquivo
+                        const blobURL = URL.createObjectURL(file);
+                        publish('pasted_file', blobURL);
+
+                        // Lê o arquivo completo em Base64
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            publish('pasted_file_base64', event.target.result);
+                            trigger('file_pasted');
+                            data.pasteEventTriggered = false; // Reseta a flag após o processamento
+                        };
+                        reader.onerror = function(error) {
+                            console.error("Erro ao converter arquivo para Base64:", error);
+                            data.pasteEventTriggered = false; // Reseta a flag em caso de erro
+                        };
+                        reader.readAsDataURL(file);
+
+                        event.preventDefault();
+                        break;
+                    }
                 }
             }
         });
@@ -141,6 +147,7 @@ function(instance, context) {
         data.pasted_file_type = null;
         valueChanged(data.el);
         data.dropEventTriggered = false;
+        data.pasteEventTriggered = false;
     };
 
     data.setInputValue = function(newValue) {
